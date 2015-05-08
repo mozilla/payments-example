@@ -1,0 +1,9 @@
+{
+  "name": "payments-example",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "fxa-relier-client": "https://github.com/mozilla/fxa-relier-client.git#0.0.8",
+    "jquery": "2.1.4"
+  }
+}
