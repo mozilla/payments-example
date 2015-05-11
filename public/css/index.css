@@ -54,15 +54,12 @@ a, button {
     color: #121007;
 }
 
-button {
-    text-decoration: none;
-}
-
 ul li {
     list-style: none;
 }
 
 button {
+    text-decoration: none;
     font-size: 1.5em;
     padding: 1em;
     text-align: center;
@@ -92,6 +89,11 @@ select {
     border-style: solid;
     border-color: rgb(204, 204, 204) rgb(204, 204, 204) rgb(179, 179, 179);
     border-radius: 6px 6px 6px 6px;
+}
+
+button#signin {
+    margin-top: 1em;
+    padding: 0.3em;
 }
 
 .clear {
