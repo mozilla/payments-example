@@ -40,7 +40,9 @@
       })
       .then(function(result) {
         console.log('token result:', result);
-        // TODO: pass this token to the payments UI for authorization.
+        // Start a payment flow with the token.
+        // TODO: this should be in an iframe.
+        window.location = 'http://pay.dev:8000/?access_token=' + result.access_token;
       }, function(err) {
         console.error('token failure:', err.responseJSON);
       });
