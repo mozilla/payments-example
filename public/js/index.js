@@ -10,7 +10,13 @@
     oauthHost: 'https://oauth-stable.dev.lcip.org/v1',
   });
 
-  $('button#signin').on('click', function() {
+  $('button#signin').on('click', signIn);
+
+  // TODO: when we have actual products this should do more.
+  $('button.pay').on('click', signIn);
+
+
+  function signIn() {
     console.log('signing in');
 
     fxaRelierClient.auth.signIn({
@@ -50,6 +56,6 @@
     }, function (err) {
       console.error('sign-in failure:', err);
     });
-  });
+  }
 
 })();
