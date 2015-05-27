@@ -3,12 +3,18 @@ This is an example site that sells products with Mozilla's
 
 The deps are committed to the tree so all you should need is to checkout this branch.
 
-## Updating or adding deps
+## Adding deps
 
-Get [bower](http://bower.io/) and update dependencies by running:
+Deps are installed via bower or npm. Where possible use npm.
 
-    bower install
+By default `node_modules` and `bower_components` are ignored. If you've
+added a new dependency update the grunt copy task to copy the new lib
+files into place and commit them.
 
-By default `bower_components` is ignored. If you've added a new dependency
-run `git add -f bower_components/<whatever>/*.js` changing the lib name and
-file extension to add as necessary.
+## Updating existing deps.
+
+Use the grunt tasks to clean and copy the lib files.
+
+```
+grunt clean copy
+```
