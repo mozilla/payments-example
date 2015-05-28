@@ -19,6 +19,9 @@
   function signIn() {
     console.log('signing in');
 
+    var product = $(this).data('productKey');
+    console.log('Got product:', product);
+
     fxaRelierClient.auth.signIn({
       // If we set state to a random string and verify that it matches on the return then we'd get
       // some CSRF protection. However, it may only apply to redirect returns, I'm not sure.
@@ -47,8 +50,12 @@
       .then(function(result) {
         console.log('token result:', result);
         // Start a payment flow with the token.
-        // TODO: this should be in an iframe.
-        window.location = 'http://pay.dev:8000/?access_token=' + result.access_token;
+        var client = new window.PaymentsClient({
+          httpsOnly: false, // This is an example don't use this in prod.
+          accessToken: result.access_token,
+          product: product,
+        });
+        client.show();
       }, function(err) {
         console.error('token failure:', err.responseJSON);
       });
