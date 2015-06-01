@@ -19,9 +19,9 @@
     },
     'pay.dev.mozaws.net': {
       redirectUri: 'http://pay.dev.mozaws.net/',
-      client_id: '61bf2e47b8118f12',
+      client_id: 'e330fc1f81e2b985',
       client_secret:
-        'f8fa58928db19ba69bd78b0cad833eaa9eb667e44cf175b5f4f81918b87587fa',
+        'b28fa38d8601fcd51a2d33f809b3279329e0aeb61f875c2c42938ba20cfd22c1',
     },
   };
 
