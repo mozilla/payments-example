@@ -19,13 +19,16 @@
     },
     'pay.dev.mozaws.net': {
       redirectUri: 'http://pay.dev.mozaws.net/',
-      client_id: 'e330fc1f81e2b985',
+      client_id: 'bd143c82a3795038',
       client_secret:
-        'b28fa38d8601fcd51a2d33f809b3279329e0aeb61f875c2c42938ba20cfd22c1',
+        '5593c8cb7003379fb6dae2f8c0df12282f915a9e9dfa865326745bcc00c0dbd0',
     },
   };
 
   var fxaConfig = fxaConfigMap[window.location.hostname];
+  if (typeof fxaConfig === 'undefined') {
+    throw new Error('no client has been defined for this domain');
+  }
 
   var fxaRelierClient = new FxaRelierClient(fxaConfig.client_id, {
     contentHost: 'https://stable.dev.lcip.org',
