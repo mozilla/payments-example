@@ -48,7 +48,9 @@
       state: 'none',
       ui: 'lightbox',
       redirectUri: fxaConfig.redirectUri,
-      scope: 'profile payments',
+      // The seller would need to request an access token with these
+      // scopes for payments to work.
+      scope: 'profile:email payments',
     })
     .then(function (res) {
       console.log('login succeeded:', res);
