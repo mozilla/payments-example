@@ -1,7 +1,7 @@
 module.exports = {
   nodedeps: {
     files: [{
-      cwd: 'node_modules/moz-payments-client/dist',
+      cwd: 'node_modules/mozilla-payments-client/dist',
       expand: true,
       src: 'payments-client.js',
       dest: 'public/lib/js',
