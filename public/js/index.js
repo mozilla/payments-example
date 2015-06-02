@@ -10,27 +10,33 @@
 
   // WARNING: this is just an example app. In a real app you wouldn't
   // expose your client secret to client side code.
-  var fxaConfigMap = {
+  var configMap = {
     'pay.dev': {
-      redirectUri: 'http://pay.dev/',
-      client_id: '487e639f210d112d',
-      client_secret:
-        '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
+      fxa: {
+        redirectUri: 'http://pay.dev/',
+        client_id: '487e639f210d112d',
+        client_secret:
+          '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
+      },
+      paymentUrl: 'http://pay.dev:8000/',
     },
     'pay.dev.mozaws.net': {
-      redirectUri: 'http://pay.dev.mozaws.net/',
-      client_id: 'bd143c82a3795038',
-      client_secret:
-        '5593c8cb7003379fb6dae2f8c0df12282f915a9e9dfa865326745bcc00c0dbd0',
+      fxa: {
+        redirectUri: 'http://pay.dev.mozaws.net/',
+        client_id: 'bd143c82a3795038',
+        client_secret:
+          '5593c8cb7003379fb6dae2f8c0df12282f915a9e9dfa865326745bcc00c0dbd0',
+      },
+      paymentUrl: 'http://pay.dev.mozaws.net:8000/',
     },
   };
 
-  var fxaConfig = fxaConfigMap[window.location.hostname];
-  if (typeof fxaConfig === 'undefined') {
-    throw new Error('no client has been defined for this domain');
+  var config = configMap[window.location.hostname];
+  if (typeof config === 'undefined') {
+    throw new Error('no configuration for this domain');
   }
 
-  var fxaRelierClient = new FxaRelierClient(fxaConfig.client_id, {
+  var fxaRelierClient = new FxaRelierClient(config.fxa.client_id, {
     contentHost: 'https://stable.dev.lcip.org',
     oauthHost: 'https://oauth-stable.dev.lcip.org/v1',
   });
@@ -47,7 +53,7 @@
       // it may only apply to redirect returns, I'm not sure.
       state: 'none',
       ui: 'lightbox',
-      redirectUri: fxaConfig.redirectUri,
+      redirectUri: config.fxa.redirectUri,
       // The seller would need to request an access token with these
       // scopes for payments to work.
       scope: 'profile:email payments',
@@ -61,8 +67,8 @@
         dataType: 'json',
         data: {
           code: res.code,
-          client_id: fxaConfig.client_id,
-          client_secret: fxaConfig.client_secret,
+          client_id: config.fxa.client_id,
+          client_secret: config.fxa.client_secret,
         },
       })
       .then(function(result) {
@@ -72,6 +78,7 @@
           httpsOnly: false, // This is an example don't use this in prod.
           accessToken: result.access_token,
           product: product,
+          paymentHost: config.paymentUrl,
         });
         client.show();
       }, function(err) {
