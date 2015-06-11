@@ -6,6 +6,11 @@ module.exports = {
       src: 'payments-client.js',
       dest: 'public/lib/js',
     }, {
+      cwd: 'node_modules/mozilla-payments-config/json',
+      expand: true,
+      src: '**',
+      dest: 'public/lib/js/mozilla-payments-config',
+    }, {
       cwd: 'node_modules/jquery/dist',
       expand: true,
       src: 'jquery.min.js',
