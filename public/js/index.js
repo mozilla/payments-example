@@ -31,6 +31,15 @@
     },
   };
 
+  loadProducts();
+
+  $('#products').on('click', 'button.pay', function(event) {
+    var product = $(this).data('productKey');
+    console.log('Got product:', product);
+
+    purchase(product);
+  });
+
   var config = configMap[window.location.hostname];
   if (typeof config === 'undefined') {
     throw new Error('no configuration for this domain');
@@ -41,11 +50,52 @@
     oauthHost: 'https://oauth-stable.dev.lcip.org/v1',
   });
 
-  function signIn() {
-    console.log('signing in');
 
-    var product = $(this).data('productKey');
-    console.log('Got product:', product);
+  // Helper functions:
+
+  function loadProducts() {
+    // This is pretty awkward. We should node-ify the config library.
+    var emptied = false;
+    [
+      'mozilla-concrete-brick.json',
+      'mozilla-concrete-mortar.json',
+
+    ].forEach(function(file) {
+      var root = $('#product-listing ul');
+
+      $.getJSON('lib/js/mozilla-payments-config/products/' + file,
+        function(data) {
+          if (!emptied) {
+            root.empty();
+            emptied = true;
+          }
+          console.log('loading product for display', data);
+
+          var product = $('<li>', {class: 'product'});
+          product.append($('<div>', {
+            class: 'product-image',
+            style: 'background-image: url(' + data.img + ')',
+          }));
+          var button = $('<button>', {
+            'class': 'pay',
+            'data-product-key': data.id
+          });
+          button.text(data.currency + ' ' + data.amount + '/mo');
+          product.append(button);
+          product.append($('<h3>' + data.description.en + '</h3>'));
+          product.append($('<div>', {class: 'clear'}));
+
+          root.append(product);
+        })
+        .fail(function() {
+          console.error('failed to get product JSON data');
+        });
+    });
+  };
+
+
+  function purchase(product) {
+    console.log('signing in');
 
     fxaRelierClient.auth.signIn({
       // If we set state to a random string and verify that it matches
@@ -89,7 +139,5 @@
       console.error('sign-in failure:', err);
     });
   }
-
-  $('button.pay').on('click', signIn);
 
 })();

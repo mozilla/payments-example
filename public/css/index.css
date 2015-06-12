@@ -100,9 +100,13 @@ button#signin {
     clear: both;
 }
 
-.product img {
+.product-image {
+    background-size: cover;
+    background-repeat: no-repeat;
     float: left;
     margin-right: 1em;
+    width: 64px;
+    height: 64px;
 }
 .product button {
     float: right;
@@ -140,6 +144,36 @@ ul li:nth-last-child(1) {
     text-align: center;
     font-size: 1.5em;
     color: red;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-cont {
+    margin: 0px auto;
+    max-width: 100%;
+    width: 300px;
+}
+
+.spinner::after {
+    margin: 40px auto 40px;
+    content: "";
+    animation: 0.9s linear 0s normal none infinite running spin;
+    display: block;
+    overflow: hidden;
+    text-indent: 100%;
+    font-size: 0px;
+    white-space: nowrap;
+    background-image: url("../img/spinnerlight.png");
+    background-size: 36px 36px;
+    height: 36px;
+    width: 36px;
 }
 
 /* portrait tablet */

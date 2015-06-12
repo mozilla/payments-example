@@ -16,5 +16,7 @@ files into place and commit them.
 Use the grunt tasks to clean and copy the lib files.
 
 ```
+npm install
+bower install
 grunt clean copy
 ```
