@@ -34,10 +34,9 @@
   loadProducts();
 
   $('#products').on('click', 'button.pay', function(event) {
-    var product = $(this).data('productKey');
-    console.log('Got product:', product);
-
-    purchase(product);
+    var productId = $(this).data('productId');
+    var productImage = $(this).data('productImage');
+    purchase({id: productId, image: productImage});
   });
 
   var config = configMap[window.location.hostname];
@@ -78,7 +77,8 @@
           }));
           var button = $('<button>', {
             'class': 'pay',
-            'data-product-key': data.id
+            'data-product-id': data.id,
+            'data-product-image': data.img,
           });
           button.text(data.currency + ' ' + data.amount + '/mo');
           product.append(button);
