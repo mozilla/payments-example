@@ -10,6 +10,13 @@
 
   // WARNING: this is just an example app. In a real app you wouldn't
   // expose your client secret to client side code.
+
+  var payURL = 'http://pay.dev:8000/';
+  if (window.location.search.indexOf('webpack') > -1) {
+    console.log('Pointing at webpack dev server');
+    payURL = 'http://pay.webpack:8080/webpack-dev-server/';
+  }
+
   var configMap = {
     'pay.dev': {
       fxa: {
@@ -18,7 +25,7 @@
         client_secret:
           '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
       },
-      paymentUrl: 'http://pay.dev:8000/',
+      paymentUrl: payURL,
     },
     'pay.dev.mozaws.net': {
       fxa: {
