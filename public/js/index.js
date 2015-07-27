@@ -26,6 +26,7 @@
           '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
       },
       paymentUrl: payURL,
+      manageUrl: payURL + 'management.html',
     },
     'pay.dev.mozaws.net': {
       fxa: {
@@ -35,8 +36,14 @@
           '5593c8cb7003379fb6dae2f8c0df12282f915a9e9dfa865326745bcc00c0dbd0',
       },
       paymentUrl: 'http://pay.dev.mozaws.net:8000/',
+      manageUrl: 'http://pay.dev.mozaws.net/management.html',
     },
   };
+
+  var config = configMap[window.location.hostname];
+  if (typeof config === 'undefined') {
+    throw new Error('no configuration for this domain');
+  }
 
   loadProducts();
 
@@ -46,10 +53,14 @@
     purchase({id: productId, image: productImage});
   });
 
-  var config = configMap[window.location.hostname];
-  if (typeof config === 'undefined') {
-    throw new Error('no configuration for this domain');
-  }
+  $('#manage').on('click', function(event) {
+    console.log('signing in to manage account');
+
+    fxaSignIn()
+    .then(function(result) {
+      window.location.href = config.manageUrl + '?access_token=' + result.access_token;
+    });
+  });
 
   var fxaRelierClient = new FxaRelierClient(config.fxa.client_id, {
     contentHost: 'https://stable.dev.lcip.org',
@@ -102,48 +113,60 @@
 
 
   function purchase(product) {
-    console.log('signing in');
+    console.log('signing in for purchase');
 
-    fxaRelierClient.auth.signIn({
-      // If we set state to a random string and verify that it matches
-      // on the return then we'd get some CSRF protection. However,
-      // it may only apply to redirect returns, I'm not sure.
-      state: 'none',
-      ui: 'lightbox',
-      redirectUri: config.fxa.redirectUri,
-      // The seller would need to request an access token with these
-      // scopes for payments to work.
-      scope: 'profile:email payments',
-    })
-    .then(function (res) {
-      console.log('login succeeded:', res);
-      console.log('requesting token for code', res.code);
-      $.ajax({
-        type: 'post',
-        url: 'https://oauth-stable.dev.lcip.org/v1/token',
-        dataType: 'json',
-        data: {
-          code: res.code,
-          client_id: config.fxa.client_id,
-          client_secret: config.fxa.client_secret,
-        },
-      })
-      .then(function(result) {
-        console.log('token result:', result);
-        // Start a payment flow with the token.
-        var client = new window.PaymentsClient({
-          httpsOnly: false, // This is an example don't use this in prod.
-          accessToken: result.access_token,
-          product: product,
-          paymentHost: config.paymentUrl,
-        });
-        client.show();
-      }, function(err) {
-        console.error('token failure:', err.responseJSON);
+    fxaSignIn()
+    .then(function(result) {
+      // Start a payment flow with the token.
+      var client = new window.PaymentsClient({
+        httpsOnly: false, // This is an example don't use this in prod.
+        accessToken: result.access_token,
+        product: product,
+        paymentHost: config.paymentUrl,
       });
+      client.show();
+    });
+  }
 
-    }, function (err) {
-      console.error('sign-in failure:', err);
+
+  function fxaSignIn() {
+    return new Promise(function(resolve, reject) {
+      fxaRelierClient.auth.signIn({
+        // If we set state to a random string and verify that it matches
+        // on the return then we'd get some CSRF protection. However,
+        // it may only apply to redirect returns, I'm not sure.
+        state: 'none',
+        ui: 'lightbox',
+        redirectUri: config.fxa.redirectUri,
+        // The seller would need to request an access token with these
+        // scopes for payments to work.
+        scope: 'profile:email payments',
+      })
+      .then(function (res) {
+        console.log('login succeeded:', res);
+        console.log('requesting token for code', res.code);
+        $.ajax({
+          type: 'post',
+          url: 'https://oauth-stable.dev.lcip.org/v1/token',
+          dataType: 'json',
+          data: {
+            code: res.code,
+            client_id: config.fxa.client_id,
+            client_secret: config.fxa.client_secret,
+          },
+        })
+        .then(function(result) {
+          console.log('token result:', result);
+          resolve(result);
+        }, function(err) {
+          console.error('token failure:', err.responseJSON);
+          reject(err);
+        });
+
+      }, function (err) {
+        console.error('sign-in failure:', err);
+        reject(err);
+      });
     });
   }
 
