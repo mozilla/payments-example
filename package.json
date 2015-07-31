@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "jquery": "^2.1.4",
-    "mozilla-payments-client": "0.0.8",
+    "mozilla-payments-client": "0.0.9",
     "mozilla-payments-config": "0.0.7"
   }
 }
