@@ -17,13 +17,14 @@
     payURL = 'http://pay.webpack:8080/webpack-dev-server/';
   }
 
+  // Configuration for FxA and the URLs. This example site has to work locally
+  // and on our pay server on AWS.
   var configMap = {
     'pay.dev': {
       fxa: {
         redirectUri: 'http://pay.dev/',
         client_id: '487e639f210d112d',
-        client_secret:
-          '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
+        client_secret: '6105ec8d4294a4d0cd8e8b8e0bc016eb8ba6eaf1aa0baff059af828a702bfe4b',
       },
       paymentUrl: payURL,
       manageUrl: payURL + 'management.html',
@@ -47,129 +48,84 @@
     throw new Error('no configuration for this domain');
   }
 
-  loadProducts();
-
-  $('#products').on('click', 'button.pay', function(event) {
-    var productId = $(this).data('productId');
-    var productImage = $(this).data('productImage');
-    purchase({id: productId, image: productImage});
-  });
-
-  $('#manage').on('click', function(event) {
-    console.log('signing in to manage account');
-
-    fxaSignIn()
-    .then(function(result) {
-      window.location.href = config.manageUrl + '?access_token=' + result.access_token;
-    });
-  });
-
   var fxaRelierClient = new FxaRelierClient(config.fxa.client_id, {
     contentHost: 'https://stable.dev.lcip.org',
     oauthHost: 'https://oauth-stable.dev.lcip.org/v1',
   });
 
-
-  // Helper functions:
-
-  function loadProducts() {
-    // This is pretty awkward. We should node-ify the config library.
-    var emptied = false;
-    [
-      'mozilla-concrete-brick.json',
-      'mozilla-concrete-mortar.json',
-
-    ].forEach(function(file) {
-      var root = $('#product-listing ul');
-
-      $.getJSON('lib/js/mozilla-payments-config/products/' + file,
-        function(data) {
-          if (!emptied) {
-            root.empty();
-            emptied = true;
-          }
-          console.log('loading product for display', data);
-
-          var product = $('<li>', {class: 'product'});
-          product.append($('<div>', {
-            class: 'product-image',
-            style: 'background-image: url(' + data.img + ')',
-          }));
-          var button = $('<button>', {
-            'class': 'pay',
-            'data-product-id': data.id,
-            'data-product-image': data.img,
-          });
-          button.text(data.currency + ' ' + data.amount + '/mo');
-          product.append(button);
-          product.append($('<h3>' + data.description.en + '</h3>'));
-          product.append($('<div>', {class: 'clear'}));
-
-          root.append(product);
-        })
-        .fail(function() {
-          console.error('failed to get product JSON data');
-        });
-    });
-  };
-
-
   function purchase(product) {
     console.log('signing in for purchase');
 
     fxaSignIn()
-    .then(function(result) {
-      // Start a payment flow with the token.
-      var client = new window.PaymentsClient({
-        httpsOnly: false, // This is an example don't use this in prod.
-        accessToken: result.access_token,
-        product: product,
-        paymentHost: config.paymentUrl,
+      .then(function(result) {
+        // Start a payment flow with the token.
+        console.log('starting payment flow');
+        var client = new window.PaymentsClient({
+          httpsOnly: false, // This is an example don't use this in prod.
+          accessToken: result.access_token,
+          product: product,
+          paymentHost: config.paymentUrl,
+        });
+        client.show();
       });
-      client.show();
-    });
   }
-
 
   function fxaSignIn() {
     return new Promise(function(resolve, reject) {
       fxaRelierClient.auth.signIn({
-        // If we set state to a random string and verify that it matches
-        // on the return then we'd get some CSRF protection. However,
-        // it may only apply to redirect returns, I'm not sure.
-        state: 'none',
-        ui: 'lightbox',
-        redirectUri: config.fxa.redirectUri,
-        // The seller would need to request an access token with these
-        // scopes for payments to work.
-        scope: 'profile:email payments',
-      })
-      .then(function (res) {
-        console.log('login succeeded:', res);
-        console.log('requesting token for code', res.code);
-        $.ajax({
-          type: 'post',
-          url: 'https://oauth-stable.dev.lcip.org/v1/token',
-          dataType: 'json',
-          data: {
-            code: res.code,
-            client_id: config.fxa.client_id,
-            client_secret: config.fxa.client_secret,
-          },
+          // If we set state to a random string and verify that it matches
+          // on the return then we'd get some CSRF protection. However,
+          // it may only apply to redirect returns, I'm not sure.
+          state: 'none',
+          ui: 'lightbox',
+          redirectUri: config.fxa.redirectUri,
+          // The seller would need to request an access token with these
+          // scopes for payments to work.
+          scope: 'profile:email payments',
         })
-        .then(function(result) {
-          console.log('token result:', result);
-          resolve(result);
+        .then(function(res) {
+          console.log('login succeeded:', res);
+          console.log('requesting token for code', res.code);
+          $.ajax({
+              type: 'post',
+              url: 'https://oauth-stable.dev.lcip.org/v1/token',
+              dataType: 'json',
+              data: {
+                code: res.code,
+                client_id: config.fxa.client_id,
+                client_secret: config.fxa.client_secret,
+              },
+            })
+            .then(function(result) {
+              console.log('token result:', result);
+              resolve(result);
+            }, function(err) {
+              console.error('token failure:', err.responseJSON);
+              reject(err);
+            });
+
         }, function(err) {
-          console.error('token failure:', err.responseJSON);
+          console.error('sign-in failure:', err);
           reject(err);
         });
-
-      }, function (err) {
-        console.error('sign-in failure:', err);
-        reject(err);
-      });
     });
   }
+
+  // This is where we call the purchase method. Since we have multiple
+  // buy buttons on this one page, we'll use a function to avoid
+  // copying and pasting the code.
+  $('button.brick').on('click', function(event) {
+    purchase({
+      'id': 'mozilla-concrete-brick',
+      'image': 'http://bit.ly/default-png'
+    });
+  });
+
+  $('button.mortar').on('click', function(event) {
+    purchase({
+      'id': 'mozilla-concrete-mortar',
+      'image': 'http://bit.ly/mortar-png'
+    });
+  });
 
 })();
