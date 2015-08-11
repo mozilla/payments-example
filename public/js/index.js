@@ -38,7 +38,7 @@
           '34ca7cf742b37dcea996280bf1cbb861e181d78ef90ccecdba7185c7f22bc164',
       },
       paymentUrl: 'http://pay.dev.mozaws.net:8000/',
-      manageUrl: 'http://pay.dev.mozaws.net/management.html',
+      manageUrl: 'http://pay.dev.mozaws.net:8000/management.html',
     },
   };
 
