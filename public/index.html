@@ -1,54 +1,139 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <title>Mozilla Concrete</title>
-  </head>
-  <body>
-    <div id="app">
-      <h1>Mozilla Concrete</h1>
-      <p>
-        Virtual building blocks for your virtual home!
-      </p>
-      <p>
-        OK, not really. This is just an example site that
-        sells products with Mozilla's
-        <a href="https://github.com/mozilla/payments">payment system</a>.
-      </p>
-      <div id="error"></div>
-      <div id="products">
-        <h2>Products</h2>
-        <div id="product-listing">
-          <ul>
-            <li>
-              <div class="spinner-cont">
-                <div class="spinner"></div>
-              </div>
-            </li>
-          </ul>
-        </ul>
-      </div>
-      <!--
-      <div id="your-products">
-        <h2>Purchases</h2>
-        <ul>
-          <li class="placeholder product">You haven't purchased anything yet.</li>
-        </ul>
-      </div>
-      -->
-      <div>
-        <button id="manage">Manage your account</button>
-      </div>
-    </div>
-    <footer>
-      <a target="_blank" href="https://github.com/mozilla/payments-example">source code</a>
-    </footer>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <title>Mozilla Payments</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-default" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">Mozilla Payments</a>
+  </div>
+  <div class="navbar-collapse collapse" id="nav">
+    <ul class="nav navbar-nav">
+        <li role="presentation"><a href="#features">Features</a></li>
+        <li role="presentation"><a href="#drop-in">Client Library</a></li>
+        <li role="presentation"><a href="#full-api">Full API</a></li>
+        <li role="presentation"><a href="#management">Management</a></li>
+        <li role="presentation"><a href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="callout">
+      <div class="container">
+    <p><a href="https://payments.readthedocs.org">Mozilla Payments</a> is a unified
+      payments interface to Mozilla sites and properties. We provide a
+      wrapper around <a href="https://www.braintreepayments.com/">Braintree</a>.
+      Consider us a replacement for using Stripe, Braintree and others.</p>
+    <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
+    <button type="button" class="btn btn-lg btn-warning brick">Try it now!</button>
+</div>
+  </div>
+
+  <div class="container">
+    <section>
+      <h2 id="features">Features</h2>
+      <p><a href="#top">↑ Back to top</a></p>
+      <ul>
+        <li>Secure credit card processing</li>
+        <li>Authentication through Firefox Accounts</li>
+        <li>Subscriptions (including handling of failures and retries)</li>
+        <li>Management interface</li>
+        <li>Emails and receipts</li>
+        <li>Localisations</li>
+      </ul>
+      <p>Todo list:</p>
+      <ul>
+        <li>One off purchases</li>
+        <li>Anonymous purchases</li>
+        <li>Paypal</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="drop-in">Client Library</h2>
+      <p><a href="#top">↑ Back to top</a></p>
+      <p>The drop-in UI presents as an iframe popup, following the style of Firefox Accounts. To integrate you need to do a couple of simple steps.</p>
+      <p>Using "Mozilla Concrete" we set up two demo products:</p>
+      <h3>1. Configuration</h3>
+      <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">Configuration</a> is done through a simple Python file:</p>
+      <pre>
+'mozilla-concrete': {
+  'email': 'support@concrete.mozilla.org',
+  'name': _('Mozilla Concrete'),
+  'url': 'http://pay.dev.mozaws.net/',
+  'terms': 'http://pay.dev.mozaws.net/terms/',
+  'products': [{
+    'id': 'mortar',
+    'description': _('Mortar'),
+    'amount': '5.00',
+    'img': 'http://bit.ly/mortar-png',
+  }]
+}
+      </pre>
+      <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">read more →</a></p>
+
+      <h3>2. Button code</h3>
+      <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button and trigger the following:</p>
+      <pre>
+var client = new window.PaymentsClient({
+  accessToken: firefox_accounts_access_token,
+  product: {
+    id: 'mozilla-concrete-mortar',
+    image: 'http://bit.log/mortar-png' },
+});
+      </pre>
+      <p><a href="http://payments.readthedocs.org/en/latest/design/api/client.html">read more →</a></p>
+
+      <h3>3. Test it!</h3>
+      <p>The following connect to the sandbox where <a href="https://developers.braintreepayments.com/ios+ruby/reference/general/testing#credit-card-numbers">test credit cards</a> are accepted:</p>
+      <p><button type="button" class="btn btn-lg btn-primary brick">Brick for $10 a month</button></p>
+      <p><button type="button" class="btn btn-lg btn-primary mortar">Mortar for $5 a month</button></p>
+    </section>
+
+    <section>
+      <h2 id="full-api">Full API</h2>
+      <p><a href="#top">↑ Back to top</a></p>
+      <p>Don't want to use the drop-in API, but control the full flow? That's fine there is a full API to use.</p>
+      <p>TODO</p>
+    </section>
+
+    <section>
+      <h2 id="management">Management</h2>
+      <p><a href="#top">↑ Back to top</a></p>
+      <p>If users log in to complete a payment, then they can access the management interface. This allows them to:</p>
+      <ul>
+        <li>add, edit and remove new payment methods</li>
+        <li>see a list of transactions</li>
+        <li>see a list of active subscriptions</li>
+        <li>cancel active subscriptions</li>
+      </ul>
+      <p><button type="button" class="btn btn-lg btn-primary management">Management interface</button></p>
+    </section>
+
+    <section>
+        <h2 id="contact">Contact Us</h2>
+        <p><a href="#top">↑ Back to top</a></p>
+        <p>Find us: #payments on IRC, at <a href="https://mail.mozilla.org/listinfo/dev-payments">dev-payments</a> or on <a href="https://github.com/mozilla/payments">github</a>. You could also contact Andy McKay or Lindsay Saunders.</p>
+    </section>
+
     <script src="lib/js/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="lib/js/fxa-relier-client.min.js"></script>
     <script src="lib/js/payments-client.js"></script>
     <script src="js/index.js"></script>
-  </body>
+</body>
 </html>
