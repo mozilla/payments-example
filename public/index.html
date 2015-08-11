@@ -38,7 +38,7 @@
       payments interface to Mozilla sites and properties. We provide a
       wrapper around <a href="https://www.braintreepayments.com/">Braintree</a>.
       Consider us a replacement for using Stripe, Braintree and others.</p>
-    <p>Work at the Mozilla Foundation or Mozilla Corporation and want to accept payments? This is for you.</p>
+    <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
     <button type="button" class="btn btn-lg btn-warning brick">Try it now!</button>
 </div>
   </div>
@@ -48,6 +48,7 @@
       <h2 id="features">Features</h2>
       <p><a href="#top">↑ Back to top</a></p>
       <ul>
+        <li>Secure credit card processing</li>
         <li>Authentication through Firefox Accounts</li>
         <li>Subscriptions (including handling of failures and retries)</li>
         <li>Management interface</li>
@@ -86,7 +87,7 @@
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">read more →</a></p>
 
       <h3>2. Button code</h3>
-      <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger. In the above example, it listens to click events on a button and trigger the following:</p>
+      <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button and trigger the following:</p>
       <pre>
 var client = new window.PaymentsClient({
   accessToken: firefox_accounts_access_token,
@@ -129,9 +130,8 @@ var client = new window.PaymentsClient({
         <p>Find us: #payments on IRC, at <a href="https://mail.mozilla.org/listinfo/dev-payments">dev-payments</a> or on <a href="https://github.com/mozilla/payments">github</a>. You could also contact Andy McKay or Lindsay Saunders.</p>
     </section>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="lib/js/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="lib/js/fxa-relier-client.min.js"></script>
     <script src="lib/js/payments-client.js"></script>
     <script src="js/index.js"></script>

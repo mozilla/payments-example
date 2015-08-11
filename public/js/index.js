@@ -129,7 +129,10 @@
   });
 
   $('button.management').on('click', function(event) {
-    window.location = config.manageUrl;
+    fxaSignIn()
+      .then(function(result) {
+        window.location.href = config.manageUrl + '?access_token=' + result.access_token;
+      });
   });
-  
+
 })();
