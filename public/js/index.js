@@ -128,4 +128,8 @@
     });
   });
 
+  $('button.management').on('click', function(event) {
+    window.location = config.manageUrl;
+  });
+  
 })();
