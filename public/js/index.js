@@ -31,9 +31,11 @@
     'pay.dev.mozaws.net': {
       fxa: {
         redirectUri: 'http://pay.dev.mozaws.net/',
-        client_id: 'bd143c82a3795038',
+        // Note that these are just throwaway *example* credentials.
+        // https://oauth-stable.dev.lcip.org/console/client/7d778aed131ec1ba
+        client_id: '7d778aed131ec1ba',
         client_secret:
-          '5593c8cb7003379fb6dae2f8c0df12282f915a9e9dfa865326745bcc00c0dbd0',
+          '34ca7cf742b37dcea996280bf1cbb861e181d78ef90ccecdba7185c7f22bc164',
       },
       paymentUrl: 'http://pay.dev.mozaws.net:8000/',
       manageUrl: 'http://pay.dev.mozaws.net/management.html',
