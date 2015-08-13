@@ -11,36 +11,36 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default" role="navigation">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="/">Mozilla Payments</a>
-  </div>
-  <div class="navbar-collapse collapse" id="nav">
-    <ul class="nav navbar-nav">
-        <li role="presentation"><a href="#features">Features</a></li>
-        <li role="presentation"><a href="#drop-in">Client Library</a></li>
-        <li role="presentation"><a href="#full-api">Full API</a></li>
-        <li role="presentation"><a href="#management">Management</a></li>
-        <li role="presentation"><a href="#contact">Contact Us</a></li>
-    </ul>
-  </div>
-</nav>
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Mozilla Payments</a>
+      </div>
+      <div class="navbar-collapse collapse" id="nav">
+        <ul class="nav navbar-nav">
+          <li role="presentation"><a href="#features">Features</a></li>
+          <li role="presentation"><a href="#drop-in">Client Library</a></li>
+          <li role="presentation"><a href="#full-api">Full API</a></li>
+          <li role="presentation"><a href="#management">Management</a></li>
+          <li role="presentation"><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <div class="callout">
-      <div class="container">
-    <p><a href="https://payments.readthedocs.org">Mozilla Payments</a> is a unified
-      payments interface to Mozilla sites and properties. We provide a
-      wrapper around <a href="https://www.braintreepayments.com/">Braintree</a>.
-      Consider us a replacement for using Stripe, Braintree and others.</p>
-    <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
-    <button type="button" class="btn btn-lg btn-warning brick">Try it now!</button>
-</div>
+    <div class="container">
+      <p><a href="https://payments.readthedocs.org">Mozilla Payments</a> is a unified payments interface to Mozilla sites and properties. We provide a wrapper around <a href="https://www.braintreepayments.com/">Braintree</a>. Consider us a replacement for
+        using Stripe, Braintree and others.</p>
+      <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
+      <button type="button" class="btn btn-lg btn-warning brick">Try it now!</button>
+    </div>
   </div>
 
   <div class="container">
@@ -71,37 +71,26 @@
       <h3>1. Configuration</h3>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">Configuration</a> is done through a simple Python file:</p>
       <pre>
-'mozilla-concrete': {
-  'email': 'support@concrete.mozilla.org',
-  'name': _('Mozilla Concrete'),
-  'url': 'http://pay.dev.mozaws.net/',
-  'terms': 'http://pay.dev.mozaws.net/terms/',
-  'products': [{
-    'id': 'mortar',
-    'description': _('Mortar'),
-    'amount': '5.00',
-    'img': 'http://bit.ly/mortar-png',
-  }]
-}
+        'mozilla-concrete': { 'email': 'support@concrete.mozilla.org', 'name': _('Mozilla Concrete'), 'url': 'http://pay.dev.mozaws.net/', 'terms': 'http://pay.dev.mozaws.net/terms/', 'products': [{ 'id': 'mortar', 'description': _('Mortar'), 'amount': '5.00',
+        'img': 'http://bit.ly/mortar-png', }] }
       </pre>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">read more →</a></p>
 
       <h3>2. Button code</h3>
       <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button and trigger the following:</p>
       <pre>
-var client = new window.PaymentsClient({
-  accessToken: firefox_accounts_access_token,
-  product: {
-    id: 'mozilla-concrete-mortar',
-    image: 'http://bit.log/mortar-png' },
-});
+        var client = new window.PaymentsClient({ accessToken: firefox_accounts_access_token, product: { id: 'mozilla-concrete-mortar', image: 'http://bit.log/mortar-png' }, });
       </pre>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/client.html">read more →</a></p>
 
       <h3>3. Test it!</h3>
       <p>The following connect to the sandbox where <a href="https://developers.braintreepayments.com/ios+ruby/reference/general/testing#credit-card-numbers">test credit cards</a> are accepted:</p>
-      <p><button type="button" class="btn btn-lg btn-primary brick">Brick for $10 a month</button></p>
-      <p><button type="button" class="btn btn-lg btn-primary mortar">Mortar for $5 a month</button></p>
+      <p>
+        <button type="button" class="btn btn-lg btn-primary brick">Brick for $10 a month</button>
+      </p>
+      <p>
+        <button type="button" class="btn btn-lg btn-primary mortar">Mortar for $5 a month</button>
+      </p>
     </section>
 
     <section>
@@ -121,13 +110,15 @@ var client = new window.PaymentsClient({
         <li>see a list of active subscriptions</li>
         <li>cancel active subscriptions</li>
       </ul>
-      <p><button type="button" class="btn btn-lg btn-primary management">Management interface</button></p>
+      <p>
+        <button type="button" class="btn btn-lg btn-primary management">Management interface</button>
+      </p>
     </section>
 
     <section>
-        <h2 id="contact">Contact Us</h2>
-        <p><a href="#top">↑ Back to top</a></p>
-        <p>Find us: #payments on IRC, at <a href="https://mail.mozilla.org/listinfo/dev-payments">dev-payments</a> or on <a href="https://github.com/mozilla/payments">github</a>. You could also contact Andy McKay or Lindsay Saunders.</p>
+      <h2 id="contact">Contact Us</h2>
+      <p><a href="#top">↑ Back to top</a></p>
+      <p>Find us: #payments on IRC, at <a href="https://mail.mozilla.org/listinfo/dev-payments">dev-payments</a> or on <a href="https://github.com/mozilla/payments">github</a>. You could also contact Andy McKay or Lindsay Saunders.</p>
     </section>
 
     <script src="lib/js/jquery.min.js"></script>
@@ -136,4 +127,5 @@ var client = new window.PaymentsClient({
     <script src="lib/js/payments-client.js"></script>
     <script src="js/index.js"></script>
 </body>
+
 </html>
