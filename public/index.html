@@ -39,7 +39,8 @@
       <p><a href="https://payments.readthedocs.org">Mozilla Payments</a> is a unified payments interface to Mozilla sites and properties. We provide a wrapper around <a href="https://www.braintreepayments.com/">Braintree</a>. Consider us a replacement for
         using Stripe, Braintree and others.</p>
       <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
-      <button type="button" class="btn btn-lg btn-warning brick">Try it now!</button>
+      <button type="button" class="btn btn-lg btn-success donation">Donate $5 now</button> or
+      <button type="button" class="btn btn-lg btn-success brick">Subscribe now</button>
     </div>
   </div>
 
@@ -49,18 +50,19 @@
       <p><a href="#top">↑ Back to top</a></p>
       <ul>
         <li>Secure credit card processing</li>
-        <li>Authentication through Firefox Accounts</li>
-        <li>Subscriptions (including handling of failures and retries)</li>
+        <li>Optional authentication through Firefox Accounts</li>
+        <li>Unauthenticated one off purchases *</li>
+        <li>Subscriptions for authenticated users (including handling of failures and retries)</li>
         <li>Management interface</li>
         <li>Emails and receipts</li>
         <li>Localisations</li>
+        <li>One off purchases of fixed or variable amounts</li>
       </ul>
       <p>Todo list:</p>
       <ul>
-        <li>One off purchases</li>
-        <li>Anonymous purchases</li>
         <li>Paypal</li>
       </ul>
+      <p>* caveats apply</p>
     </section>
 
     <section>
@@ -71,20 +73,47 @@
       <h3>1. Configuration</h3>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">Configuration</a> is done through a simple Python file:</p>
       <pre>
-        'mozilla-concrete': { 'email': 'support@concrete.mozilla.org', 'name': _('Mozilla Concrete'), 'url': 'http://pay.dev.mozaws.net/', 'terms': 'http://pay.dev.mozaws.net/terms/', 'products': [{ 'id': 'mortar', 'description': _('Mortar'), 'amount': '5.00',
-        'img': 'http://bit.ly/mortar-png', }] }
+        'mozilla-concrete': {
+            'email': 'support@concrete.mozilla.org',
+            'name': _('Mozilla Concrete'),
+            'url': 'http://pay.dev.mozaws.net/',
+            'terms': 'http://pay.dev.mozaws.net/terms/',
+            'products': [{
+                'id': 'mortar',
+                'description': _('Mortar'),
+                'amount': '5.00',
+                'img': 'http://bit.ly/mortar-png',
+            }]
+        }
       </pre>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/configuration.html">read more →</a></p>
 
       <h3>2. Button code</h3>
-      <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button and trigger the following:</p>
+      <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button.</p>
+      <p>To subscribe to the 'mortar' product, which requires authentication:</p>
       <pre>
-        var client = new window.PaymentsClient({ accessToken: firefox_accounts_access_token, product: { id: 'mozilla-concrete-mortar', image: 'http://bit.log/mortar-png' }, });
+        var client = new window.PaymentsClient({
+            accessToken: firefox_accounts_access_token,
+            product: {
+                id: 'mozilla-concrete-mortar',
+                image: 'http://bit.log/mortar-png'
+            },
+        });
+      </pre>
+      <p>To donate to the 'foundation', without authentication::</p>
+      <pre>
+        var client = new window.PaymentsClient({
+            product: {
+                id: 'mozilla-foundation-donation',
+                amount: '5.00'
+            },
+        });
       </pre>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/client.html">read more →</a></p>
 
       <h3>3. Test it!</h3>
       <p>The following connect to the sandbox where <a href="https://developers.braintreepayments.com/ios+ruby/reference/general/testing#credit-card-numbers">test credit cards</a> are accepted:</p>
+      <h4>Some subscription examples:</h4>
       <p>
         <button type="button" class="btn btn-lg btn-primary brick">Brick for $10 a month</button>
       </p>
