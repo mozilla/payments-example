@@ -40,7 +40,7 @@
         using Stripe, Braintree and others.</p>
       <p>Are you looking to accept payments on a Mozilla Foundation or Mozilla Corporation site? This is for you.</p>
       <button type="button" class="btn btn-lg btn-success donation">Donate $5 now</button> or
-      <button type="button" class="btn btn-lg btn-success brick">Subscribe now</button>
+      <button type="button" class="btn btn-lg btn-success brick">Subscribe now</button> and <a href="#test">more →</a>
     </div>
   </div>
 
@@ -90,7 +90,7 @@
 
       <h3>2. Button code</h3>
       <p>Add in the <a href="http://payments.readthedocs.org/en/latest/design/api/client.html">button code</a> to trigger the payments flow. In the above example, it listens to click events on a button.</p>
-      <p>To subscribe to the 'mortar' product, which requires authentication:</p>
+      <p>To subscribe to the "mortar" product, which requires authentication:</p>
       <pre>
         var client = new window.PaymentsClient({
             accessToken: firefox_accounts_access_token,
@@ -100,7 +100,7 @@
             },
         });
       </pre>
-      <p>To donate to the 'foundation', without authentication::</p>
+      <p>To donate to the "foundation", without authentication:</p>
       <pre>
         var client = new window.PaymentsClient({
             product: {
@@ -111,15 +111,27 @@
       </pre>
       <p><a href="http://payments.readthedocs.org/en/latest/design/api/client.html">read more →</a></p>
 
-      <h3>3. Test it!</h3>
+      <h3 id="test">3. Test it!</h3>
+      <p><a href="#top">↑ Back to top</a></p>
       <p>The following connect to the sandbox where <a href="https://developers.braintreepayments.com/ios+ruby/reference/general/testing#credit-card-numbers">test credit cards</a> are accepted:</p>
-      <h4>Some subscription examples:</h4>
+      <h4>Subscription examples:</h4>
       <p>
         <button type="button" class="btn btn-lg btn-primary brick">Brick for $10 a month</button>
       </p>
       <p>
         <button type="button" class="btn btn-lg btn-primary mortar">Mortar for $5 a month</button>
       </p>
+      <h4>Donation example:</h4>
+      <p>With a variable amount:</p>
+      <form class="donation-variable">
+        <div class="form-group">
+          <label for="donation-amount">Amount</label>
+          <input type="text" placeholder="5" class="form-control" id="donation-amount"/>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-lg btn-success" class="form-control">Donate</button>
+        </div>
+      </form>
     </section>
 
     <section>

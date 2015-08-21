@@ -147,6 +147,15 @@
     });
   });
 
+  $('form.donation-variable').on('submit', function(event) {
+    event.preventDefault();
+    purchaseWithoutAuth({
+      'id': 'mozilla-foundation-donation',
+      'image': 'http://bit.ly/default-png',
+      'amount': $('#donation-amount').val() || 5,
+    });
+  })
+
   $('button.management').on('click', function(event) {
     fxaSignIn()
       .then(function(result) {

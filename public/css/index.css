@@ -29,3 +29,18 @@ body {
 section {
     padding-bottom: 4em;
 }
+
+form {
+    width: 15em;
+    padding: 2em;
+    margin: 1em;
+    border: 1px solid lightgrey;
+}
+
+form.button {
+    padding-top: 1em;
+}
+
+h4 {
+    padding-top: 2em;
+}
