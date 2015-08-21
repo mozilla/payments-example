@@ -53,7 +53,7 @@
     oauthHost: 'https://oauth-stable.dev.lcip.org/v1',
   });
 
-  function purchase(product) {
+  function purchaseWithAuth(product) {
     console.log('signing in for purchase');
 
     fxaSignIn()
@@ -68,6 +68,17 @@
         });
         client.show();
       });
+  }
+
+  function purchaseWithoutAuth(product) {
+    console.log('starting purchase without auth');
+
+    var client = new window.PaymentsClient({
+      httpsOnly: false, // This is an example don't use this in prod.
+      product: product,
+      paymentHost: config.paymentUrl,
+    });
+    client.show();
   }
 
   function fxaSignIn() {
@@ -115,16 +126,24 @@
   // buy buttons on this one page, we'll use a function to avoid
   // copying and pasting the code.
   $('button.brick').on('click', function(event) {
-    purchase({
+    purchaseWithAuth({
       'id': 'mozilla-concrete-brick',
       'image': 'http://bit.ly/default-png'
     });
   });
 
   $('button.mortar').on('click', function(event) {
-    purchase({
+    purchaseWithAuth({
       'id': 'mozilla-concrete-mortar',
       'image': 'http://bit.ly/mortar-png'
+    });
+  });
+
+  $('button.donation').on('click', function(event) {
+    purchaseWithoutAuth({
+      'id': 'mozilla-foundation-donation',
+      'image': 'http://bit.ly/default-png',
+      'amount': 5,
     });
   });
 
