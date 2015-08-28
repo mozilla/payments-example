@@ -11,7 +11,7 @@
     "url": "git+https://github.com/mozilla/payments-example.git"
   },
   "author": "Mozilla Payments Team",
-  "license": "MPL 2.0",
+  "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/mozilla/payments-example/issues"
   },
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "jquery": "^2.1.4",
-    "mozilla-payments-client": "0.0.10",
+    "mozilla-payments-client": "0.0.11",
     "mozilla-payments-config": "0.0.7"
   }
 }
