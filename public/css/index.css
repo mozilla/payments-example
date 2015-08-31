@@ -44,3 +44,7 @@ form.button {
 h4 {
     padding-top: 2em;
 }
+
+.donation-variable .form-group .btn {
+    margin-top: 0.5em;
+}
