@@ -147,10 +147,11 @@
     });
   });
 
-  $('form.donation-variable').on('submit', function(event) {
+  $('button.donation-variable').on('click', function(event) {
     event.preventDefault();
+    var productId = $(this).data('product-id');
     purchaseWithoutAuth({
-      'id': 'mozilla-foundation-donation',
+      'id': productId,
       'image': 'http://bit.ly/default-png',
       'amount': $('#donation-amount').val() || 5,
     });
